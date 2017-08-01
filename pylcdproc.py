@@ -206,6 +206,12 @@ class HBargraph(BargraphWidget):
 class VBargraph(BargraphWidget):
     pass
 
+class WidgetFactoryLCD(BaseLCD):
+    def HBargraph(self, x, y, length):
+        return HBargraph(self, x, y, length)
+
+    def VBargraph(self, x, y, length):
+        return VBargraph(self, x, y, length)
 
 ##
 ## specialized screens
