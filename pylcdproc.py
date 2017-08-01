@@ -219,7 +219,8 @@ class BargraphWidget(LCDWidget):
     length = None
 
     def __init__(self, lcd, x=1, y=1, length=1):
-        (self.lcd, self.x, self.y, self.length) = (lcd, x, y, length)
+        super().__init__(lcd)
+        (self.x, self.y, self.length) = (x, y, length)
 
     def set(self, x, y, length):
         self.lcd.widget_set(self.wid, x, y, length)
