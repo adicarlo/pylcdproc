@@ -225,6 +225,10 @@ class BargraphWidget(LCDWidget):
         (self.x, self.y, self.length) = (x, y, length)
         self.lcd.widget_set(self.wid, x, y, length)
 
+    def update(self, length):
+        self.length = length
+        self.lcd.widget_set(self.wid, self.x, self.y, length)
+
 
 class HBargraph(BargraphWidget):
     widget_type = 'hbar'
