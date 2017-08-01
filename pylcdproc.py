@@ -190,23 +190,19 @@ Base class for lcdproc widgets.  Always associated with an LCD.
     lcd         = None
     widget_type = None
     wid         = None
-    _ctr        = 1
-    def get_ctr(self):
-        return self._ctr
-    def set_ctr(self, val):
-        self._ctr = val
-    def incr_ctr(self):
-        self.set_ctr(self._ctr + 1)
-    ctr = property(get_ctr, set_ctr)
-
     def __init__(self, lcd):
         self.lcd = lcd
         self.set_wid()
         self.lcd.widget_add(self.wid, self.widget_type)
 
     def set_wid(self):
-        self.wid = self.widget_type + str(self.get_ctr())
-        self.incr_ctr()
+        self.wid = self.widget_type + str(self.lcd.ctr)
+        self.lcd.incr_ctr()
+        return self.wid
+
+    def draw(self):
+        "Simply draw the widget, using current settings"
+        raise NotImplementedError
 
     def set(self, *args):
         "Set the widget parameters and draw the widget"
@@ -222,7 +218,11 @@ class BargraphWidget(LCDWidget):
         super().__init__(lcd)
         (self.x, self.y, self.length) = (x, y, length)
 
+    def draw(self):
+        self.lcd.widget_set(self.wid, self.x, self.y, self.length)
+
     def set(self, x, y, length):
+        (self.x, self.y, self.length) = (x, y, length)
         self.lcd.widget_set(self.wid, x, y, length)
 
 
@@ -233,10 +233,17 @@ class VBargraph(BargraphWidget):
     widget_type = 'vbar'
 
 class WidgetFactoryLCD(BaseLCD):
-    def HBargraph(self, x, y, length):
+    # widget counter
+    ctr = 0
+    def incr_ctr(self):
+        self.ctr += 1
+
+    def HBargraph(self, x=None, y=None, length=None):
+        self.incr_ctr()
         return HBargraph(self, x, y, length)
 
-    def VBargraph(self, x, y, length):
+    def VBargraph(self, x=None, y=None, length=None):
+        self.incr_ctr()
         return VBargraph(self, x, y, length)
 
 ##
