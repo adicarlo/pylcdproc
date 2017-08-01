@@ -25,13 +25,27 @@ class LCDHuhError(LCDCommandError): pass
 class LCDProtocolError(LCDCommandError): pass
 class LCDNoSuccessError(LCDCommandError): pass
 
+
+class LCDWidget:
+    """
+Base class for lcdproc widgets.  Always associated with an LCD.
+class BaseLCD:
+    """
+    pass
+
+class HBargraph(LCDWidget):
+    pass
+
+class VBargraph(LCDWidget):
+    pass
+
 class BaseLCD:
     """
 Very basic interface to LCDd via telnet.  Assumes we only have one screen!
     """
     tn          = None
     protocol    = None
-    reqproto    = ['0.3']                 # list of supported protocols
+    reqproto    = ['0.3']                # list of supported protocols
     version     = None
     width       = None
     height      = None
