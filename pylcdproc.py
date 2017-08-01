@@ -227,7 +227,8 @@ class ScrollingTextLCD(BaseLCD):
     def display(self, text):
         if len(text) > self.width:
             self.widget_set(self.line1wid, 1, 1, text[:self.width])
-            self.widget_set(self.line2wid, 1, self.height, self.width, self.height, 'h', 1, text[self.width:])
+            # FIXME: scrolling starts immediately, which is a bit much
+            self.widget_set(self.line2wid, 1, self.height, self.width, self.height, 'm', 1, text[self.width:])
         else:
             self.widget_set(self.line1wid, 1, 1, text)
 
