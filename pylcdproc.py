@@ -26,25 +26,6 @@ class LCDProtocolError(LCDCommandError): pass
 class LCDNoSuccessError(LCDCommandError): pass
 
 
-class LCDWidget:
-    """
-Base class for lcdproc widgets.  Always associated with an LCD.
-    """
-    lcd    = None
-    x      = None
-    y      = None
-    length = None
-
-    def __init__(self, lcd, x=1, y=1, length=1):
-        (self.lcd, self.x, self.y, self.length) = (lcd, x, y, length)
-    pass
-
-class HBargraph(LCDWidget):
-    pass
-
-class VBargraph(LCDWidget):
-    pass
-
 class BaseLCD:
     """
 Very basic interface to LCDd via telnet.  Assumes we only have one screen!
@@ -199,7 +180,36 @@ class nMediaPCLCD(BaseLCD):
                        'FR',              # JP
                        'REC'              # small 3 ??!
                        ]
+##
+## widgets
+##
+class LCDWidget:
+    """
+Base class for lcdproc widgets.  Always associated with an LCD.
+    """
+    lcd    = None
+    def __init__(self, lcd):
+        self.lcd = lcd
 
+class BargraphWidget(LCDWidget):
+    x      = None
+    y      = None
+    length = None
+
+    def __init__(self, lcd, x=1, y=1, length=1):
+        (self.lcd, self.x, self.y, self.length) = (lcd, x, y, length)
+    pass
+
+class HBargraph(BargraphWidget):
+    pass
+
+class VBargraph(BargraphWidget):
+    pass
+
+
+##
+## specialized screens
+##
 class IconFieldLCD(BaseLCD):
     """
     A simple LCD setup such that each cell is filled with an icon widget to be manipulated.
@@ -236,19 +246,21 @@ class ScrollingTextLCD(BaseLCD):
     Provide the entire LCD as a single wrapped text area, with the 2nd line scrolling as needed.
     FIXME: should be flexible for any number of lines
     """
-    line1wid = "line1"
-    line2wid = "line2"
+    wid = []
 
     def populate_screen(self):
-        self.widget_add(self.line1wid, 'string')
-        self.widget_add(self.line2wid, 'scroller')
+        for i in range(1, self.height):
+            self.widget_add('line' + str(i), 'string')
+        # final line is different
+        self.widget_add('line' + str(self.height), 'scroller')
         self.display('')
 
     def display(self, text):
+        # FIXME: make flexible for multiple lines
         if len(text) > self.width:
-            self.widget_set(self.line1wid, 1, 1, text[:self.width])
+            self.widget_set('line1', 1, 1, text[:self.width])
             # FIXME: scrolling starts immediately, which is a bit much
-            self.widget_set(self.line2wid, 1, self.height, self.width, self.height, 'm', 1, text[self.width:])
+            self.widget_set('line2', 1, self.height, self.width, self.height, 'm', 1, text[self.width:])
         else:
-            self.widget_set(self.line1wid, 1, 1, text)
+            self.widget_set('line1', 1, 1, text)
 
