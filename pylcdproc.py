@@ -165,6 +165,8 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
                 func(x, y)
 
     def dispose(self):
+        # we could careful delete widgets and the screen, but its easier to
+        # just crash out
         self.tn.close()
         self.tn = None
 
