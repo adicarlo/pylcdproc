@@ -10,5 +10,5 @@ A few generally useful utilities:
  - lcdmessage shows a message for a brief period on the foreground, good for alerts
 
 Planned:
- -[ ] mythlcdstatus summarizes MythTV recordings
+ - mythlcdstatus summarizes MythTV recordings
 
