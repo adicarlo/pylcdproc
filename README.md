@@ -9,6 +9,9 @@ display.
 A few generally useful utilities:
  - lcdmessage shows a message for a brief period on the foreground, good for alerts
 
-Planned:
- - mythlcdstatus summarizes MythTV recordings
+## plans
+
+Risking God's laughter:
+ - 'make install'
+ - mythlcdstatus summarizes MythTV recording status, next upcoming recording
 
