@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+
+import time
+import argparse
+import pylcdproc
+
+default_host = 'localhost'
+default_port = 13666
+default_duration = 10
+
+def main():
+    parser = argparse.ArgumentParser(description="Display message on LCDd server")
+    parser.add_argument("message", nargs='*', help="message to display")
+    parser.add_argument("-t", "--time", type=int, default=default_duration,
+                        help="duration to display message, in seconds (default: " + str(default_duration) + ")")
+    parser.add_argument("-H", "--host", default=default_host,
+                        help="host to connect to (default: " + default_host + ")")
+    parser.add_argument("-p", "--port", type=int, default=default_port,
+                        help="port to connect to (default: " + str(default_port) + ")")
+    parser.add_argument("-d", "--debug", action="store_true",
+                        help="enable debugging")
+    args = parser.parse_args()
+    lcd = pylcdproc.ScrollingTextLCD("lcd_message", host=args.host, port=args.port, debug=args.debug)
+    message = " ".join(args.message)
+    print("displaying message:", message)
+    lcd.display(message)
+    time.sleep(args.time)
+
+if __name__ == "__main__":
+    main()
