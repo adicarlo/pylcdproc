@@ -29,7 +29,6 @@ class LCDNoSuccessError(LCDCommandError): pass
 class LCDWidget:
     """
 Base class for lcdproc widgets.  Always associated with an LCD.
-class BaseLCD:
     """
     lcd    = None
     x      = None
