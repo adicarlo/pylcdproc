@@ -170,7 +170,7 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
             func(x)
 
     def over_all_rows(self, func):
-        for y in range(1, self.width + 1):
+        for y in range(1, self.height + 1):
             func(y)
 
     def dispose(self):
