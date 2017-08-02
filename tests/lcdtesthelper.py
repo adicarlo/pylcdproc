@@ -3,6 +3,9 @@ import time
 import pylcdproc
 
 class BaseLCDTest(unittest.TestCase):
+    """
+    Create a linkage between a class of TestCases and LCD screens.
+    """
     lcd = None
 
     def setUp(self):
