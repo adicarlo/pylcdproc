@@ -29,8 +29,8 @@ class TestVBargraphLCD(lcdtesthelper.StaticLCDTest):
         self.assertEqual(len(self.lcd.widgets), self.lcd.width)
 
     def test_widget_ids(self):
-        self.assertEqual(self.lcd.graphs[0].wid, "vbar0")
-        self.assertEqual(self.lcd.graphs[1].wid, "vbar1")
+        self.assertEqual(self.lcd.graphs[0].wid, "vbar1")
+        self.assertEqual(self.lcd.graphs[1].wid, "vbar2")
 
     def test_single(self):
         "play with first graph"

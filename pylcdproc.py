@@ -249,7 +249,7 @@ class VBargraph(BargraphWidget):
 
 class WidgetFactoryLCD(BaseLCD):
     # widget counter
-    ctr = 0
+    ctr = 1
     def incr_ctr(self):
         self.ctr += 1
 
