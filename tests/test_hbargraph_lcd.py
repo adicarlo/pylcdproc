@@ -3,7 +3,7 @@ import pylcdproc
 import lcdtesthelper
 import time
 
-class BargraphLCD(pylcdproc.WidgetFactoryLCD):
+class HBargraphLCD(pylcdproc.WidgetFactoryLCD):
     "Example LCD bargraph layout for testing, single large hbargraph"
     graph = None
 
@@ -14,13 +14,13 @@ class BargraphLCD(pylcdproc.WidgetFactoryLCD):
         self.graph.update(value)
 
 
-class TestBargraphLCD(lcdtesthelper.StaticLCDTest):
+class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
     max_width = None
 
     @classmethod
     def instantiateLCD(klass, appname="testScrollingText", host="gw.coo", debug=True):
         print("instantiating", str(klass))
-        return BargraphLCD(appname, host)
+        return HBargraphLCD(appname, host)
 
     def setUp(self):
         super().setUp()
