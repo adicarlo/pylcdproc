@@ -165,6 +165,14 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
             for x in range(1, self.width + 1):
                 func(x, y)
 
+    def over_all_cols(self, func):
+        for x in range(1, self.width + 1):
+            func(x)
+
+    def over_all_rows(self, func):
+        for y in range(1, self.width + 1):
+            func(y)
+
     def dispose(self):
         # we could careful delete widgets and the screen, but its easier to
         # just crash out
