@@ -254,11 +254,9 @@ class WidgetFactoryLCD(BaseLCD):
         self.ctr += 1
 
     def HBargraph(self, x=None, y=None, length=None):
-        self.incr_ctr()
         return HBargraph(self, x, y, length)
 
     def VBargraph(self, x=None, y=None, length=None):
-        self.incr_ctr()
         return VBargraph(self, x, y, length)
 
 ##
