@@ -14,7 +14,11 @@ class VBargraphLCD(pylcdproc.WidgetFactoryLCD):
         self.over_all_cols(popone)
 
     def set(self, *vallist):
+        self.set_list(vallist)
+
+    def set_list(self, vallist):
         for idx, val in enumerate(vallist):
+            print("setting", idx, "to", val)
             self.graphs[idx].update(val)
 
 
@@ -34,16 +38,23 @@ class TestVBargraphLCD(lcdtesthelper.StaticLCDTest):
 
     def test_single(self):
         "play with first graph"
-        print('setting to one...')
         self.lcd.graphs[0].update(1)
-        print('setting to five...')
         self.lcd.graphs[0].update(5)
 
     def test_list(self):
         "increasing list of bargraphs"
         vals = range(self.lcd.width)
-        self.lcd.set(*vals)
-        time.sleep(5)
+        self.lcd.set_list(vals)
+
+    def test_mountain(self):
+        half = int(self.lcd.width / 2)
+        up = range(0, half)
+        down = range(half, 0, -1)
+        self.lcd.set_list(list(up) + list(down))
+
+    def test_value_one(self):
+        "Chasing a bug in LCD where value 1 is value 2" 
+        self.lcd.set_list([0, 1, 2] * int(self.lcd.width / 3))
 
 if __name__ == '__main__':
     unittest.main()
