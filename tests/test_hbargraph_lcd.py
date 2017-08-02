@@ -18,8 +18,8 @@ class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
     max_width = None
 
     @classmethod
-    def instantiateLCD(klass, appname="testScrollingText", host="gw.coo", debug=True):
-        return HBargraphLCD(appname, host)
+    def instantiateLCD(klass, appname="TestHBargraphLCD", host="gw.coo", debug=False):
+        return HBargraphLCD(appname, host, debug=debug)
 
     def setUp(self):
         super().setUp()
