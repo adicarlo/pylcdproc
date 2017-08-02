@@ -19,7 +19,6 @@ class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
 
     @classmethod
     def instantiateLCD(klass, appname="testScrollingText", host="gw.coo", debug=True):
-        print("instantiating", str(klass))
         return HBargraphLCD(appname, host)
 
     def setUp(self):
@@ -27,6 +26,7 @@ class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
         self.max_width = self.lcd.width * self.lcd.cell_width
 
     def test_base(self):
+        "some basic assertions"
         self.assertTrue(self.lcd.graph)   # do we have a widget
         self.assertEqual(len(self.lcd.widgets), 1)
 
