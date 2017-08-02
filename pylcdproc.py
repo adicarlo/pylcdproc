@@ -62,6 +62,7 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
         self.do_command("screen_set s -heartbeat off")
         self.do_command("screen_set s -cursor off")
         self.flush_read()
+        self.widgets = []
         self.populate_screen()
 
     def verbose(self, msg):

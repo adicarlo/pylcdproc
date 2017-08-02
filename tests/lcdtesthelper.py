@@ -18,6 +18,10 @@ class StaticLCDTest(BaseLCDTest):
     def setUpClass(cls):
         cls.lcd = cls.instantiateLCD()
 
+    @classmethod
+    def tearDownClass(cls):
+        cls.lcd.dispose()
+
     def setUp(self):
         if not self.lcd:
             self.lcd = type(self).lcd
