@@ -18,7 +18,7 @@ class VBargraphLCD(pylcdproc.WidgetFactoryLCD):
 
     def set_list(self, vallist):
         for idx, val in enumerate(vallist):
-            print("setting", idx, "to", val)
+            # print("setting", idx, "to", val)
             self.graphs[idx].update(val)
 
 
