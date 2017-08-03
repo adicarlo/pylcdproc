@@ -147,6 +147,7 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
         "Add a widget, providing its ID and type"
         self.command_success('widget_add s ' + wid + ' ' + wtype)
         self.widgets.append(wid)
+        return wid
 
     def widget_set(self, wid, *widget_args):
         cmd = 'widget_set s ' + wid + ' "' + '" "'.join(map(lambda x: str(x), widget_args)) + '"'
@@ -308,20 +309,46 @@ class ScrollingTextLCD(BaseLCD):
     Provide the entire LCD as a single wrapped text area, with the 2nd line scrolling as needed.
     FIXME: should be flexible for any number of lines
     """
-    wid = []
+    scrolltextwidgets = []
 
     def populate_screen(self):
         for i in range(1, self.height):
-            self.widget_add('line' + str(i), 'string')
+            self.scrolltextwidgets.append(self.widget_add('line' + str(i), 'string'))
         # final line is different
-        self.widget_add('line' + str(self.height), 'scroller')
+        self.scrolltextwidgets.append(self.widget_add('line' + str(self.height), 'scroller'))
         self.display('')
 
+    class TextWrapper:
+        """
+        FIXME: this should be implemented to iterate over
+        scrolltextwidgets, really
+        """
+        def __init__(self, text, lcd):
+            (self.text, self.remain, self.lcd) = (text, text, lcd)
+
+        def __iter__(self):
+            self.windex = 0     # index into self.lcd.wid
+            return self
+
+        def __next__(self):
+            portion = self.remain[:self.lcd.width]
+            self.remain = self.remain[self.lcd.width:]
+            if portion:
+                wid = self.lcd.scrolltextwidgets[self.windex]
+                if self.windex < self.lcd.height:
+                    self.lcd.widget_set(wid, 1, self.windex, portion)
+                elif self.windex == self.lcd.height:  # last line
+                    print("done and scrolly")
+                    self.lcd.widget_set(wid, 1, self.height, self.windex,
+                                        self.height, 'm', 1, portion)
+                else:
+                    raise StopIteration
+                self.windex += 1
+                return portion
+            else:
+                raise StopIteration
+
+
     def display(self, text):
-        # FIXME: make flexible for multiple lines
-        if len(text) > self.width:
-            self.widget_set('line1', 1, 1, text[:self.width])
-            # FIXME: scrolling starts immediately, which is a bit much
-            self.widget_set('line2', 1, self.height, self.width, self.height, 'm', 1, text[self.width:])
-        else:
-            self.widget_set('line1', 1, 1, text)
+        for t in ScrollingTextLCD.TextWrapper(text, self):
+            print("displaying", t)
