@@ -2,6 +2,7 @@ import unittest
 import time
 import pylcdproc
 
+
 class BaseLCDTest(unittest.TestCase):
     """
     Create a linkage between a class of TestCases and LCD screens.
@@ -18,6 +19,7 @@ class BaseLCDTest(unittest.TestCase):
     def hold(self, sleep_secs=30):
         print("waiting for", sleep_secs, "seconds")
         time.sleep(sleep_secs)
+
 
 class StaticLCDTest(BaseLCDTest):
     """
@@ -40,8 +42,7 @@ class StaticLCDTest(BaseLCDTest):
     def tearDown(self):
         pass
 
+
 class WidgetLCDTest(BaseLCDTest):
     def instantiateLCD(appname="testLCD", host="gw.coo"):
         return pylcdproc.WidgetFactoryLCD(appname, host=host)
-
-
