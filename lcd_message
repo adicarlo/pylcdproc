@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+# FIXME: not displaying anything
+
 import time
 import argparse
 import pylcdproc

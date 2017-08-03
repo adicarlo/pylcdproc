@@ -19,6 +19,7 @@ class TestScrollingText(lcdtesthelper.StaticLCDTest):
         self.lcd.display("longer message is known to be rather long")
 
     def test_long(self):
+        # FIXME: test failing
         self.lcd.display("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vulputate sollicitudin scelerisque. Fusce ex erat, convallis ac arcu ac, auctor volutpat enim. Sed dignissim felis ac neque tristique, id sagittis diam semper. Vestibulum lacinia ante fringilla euismod aliquam. Morbi dapibus tincidunt massa in sollicitudin. Praesent feugiat metus vitae faucibus luctus. Phasellus venenatis tellus vitae lacinia laoreet. Praesent vitae tortor viverra, sodales leo id, malesuada sem. Etiam varius, leo id pretium iaculis, ante tortor interdum dolor, at convallis urna mi sit amet est.")
 
 
