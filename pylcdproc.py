@@ -48,7 +48,9 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
         'ELLIPSIS', 'STOP', 'PAUSE', 'PLAY', 'PLAYR', 'FF', 'FR', 'NEXT',
         'PREV', 'REC' ]
 
-    def __init__(self, appname, host='localhost', port=13666, debug=False, priority='foreground'):
+    def __init__(self, appname, host='localhost', port=13666,
+                 debug=False, priority='foreground'):
+        assert isinstance(appname, str), "appname must be a string"
         self.debug = debug
         self.tn = telnetlib.Telnet(host, port, 5)
         # the response to hello
