@@ -2,6 +2,7 @@ import unittest
 import pylcdproc
 import lcdtesthelper
 
+
 class TestDoCommand(lcdtesthelper.BaseLCDTest):
     def test_hello(self):
         self.assertTrue(self.lcd.do_command('hello'))
@@ -13,6 +14,6 @@ class TestDoCommand(lcdtesthelper.BaseLCDTest):
         with self.assertRaises(pylcdproc.LCDHuhError):
             print("DEBUG:", self.lcd.do_command('nosuchcommand'))
 
+
 if __name__ == '__main__':
     unittest.main()
-
