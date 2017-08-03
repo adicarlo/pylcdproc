@@ -7,7 +7,7 @@ class IconFieldTestLCD(pylcdproc.IconFieldLCD, pylcdproc.nMediaPCLCD): pass
 
 class TestIconField(lcdtesthelper.StaticLCDTest):
 
-    def instantiateLCD(appname="testIconField", host="gw.coo"):
+    def instantiateLCD(appname="testIconField", host=lcdtesthelper._default_test_host()):
         return IconFieldTestLCD(appname, host)
 
     def assert_widget_count(self):

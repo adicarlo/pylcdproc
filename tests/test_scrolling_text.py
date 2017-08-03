@@ -4,7 +4,7 @@ import pylcdproc
 import lcdtesthelper
 
 class TestScrollingText(lcdtesthelper.StaticLCDTest):
-    def instantiateLCD(appname="testScrollingText", host="gw.coo"):
+    def instantiateLCD(appname="testScrollingText", host=lcdtesthelper._default_test_host()):
         # FIXME: is there any way to tramp the debug setting from debug verbosity?
         return pylcdproc.ScrollingTextLCD(appname, host, debug=False)
 

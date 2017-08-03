@@ -25,7 +25,7 @@ class VBargraphLCD(pylcdproc.WidgetFactoryLCD):
 
 class TestVBargraphLCD(lcdtesthelper.StaticLCDTest):
     @classmethod
-    def instantiateLCD(klass, appname="TestVBargraphLCD", host="gw.coo", debug=False):
+    def instantiateLCD(klass, appname="TestVBargraphLCD", host=lcdtesthelper._default_test_host(), debug=False):
         return VBargraphLCD(appname, host=host, debug=debug)
 
     def test_base(self):

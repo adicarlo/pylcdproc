@@ -18,7 +18,7 @@ class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
     max_width = None
 
     @classmethod
-    def instantiateLCD(klass, appname="TestHBargraphLCD", host="gw.coo", debug=False):
+    def instantiateLCD(klass, appname="TestHBargraphLCD", host=lcdtesthelper._default_test_host(), debug=False):
         return HBargraphLCD(appname, host, debug=debug)
 
     def setUp(self):

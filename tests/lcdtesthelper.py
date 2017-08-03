@@ -1,6 +1,14 @@
 import unittest
 import time
 import pylcdproc
+import os
+
+
+def _default_test_host(host=None):
+    """
+    Default host to connect to.
+    """
+    return(host or os.environ.get('LCD_TEST_HOST') or 'localhost')
 
 
 class BaseLCDTest(unittest.TestCase):
@@ -13,8 +21,8 @@ class BaseLCDTest(unittest.TestCase):
         if not self.lcd:
             self.lcd = type(self).instantiateLCD()
 
-    def instantiateLCD(appname="testLCD", host="gw.coo"):
-        return pylcdproc.BaseLCD(appname, host=host)
+    def instantiateLCD(appname="testLCD", host=None):
+        return pylcdproc.BaseLCD(appname, host=_default_test_host(host))
 
     def hold(self, sleep_secs=30):
         print("waiting for", sleep_secs, "seconds")
@@ -44,5 +52,5 @@ class StaticLCDTest(BaseLCDTest):
 
 
 class WidgetLCDTest(BaseLCDTest):
-    def instantiateLCD(appname="testLCD", host="gw.coo"):
-        return pylcdproc.WidgetFactoryLCD(appname, host=host)
+    def instantiateLCD(appname="testLCD", host=None):
+        return pylcdproc.WidgetFactoryLCD(appname, host=_default_test_host(host))
