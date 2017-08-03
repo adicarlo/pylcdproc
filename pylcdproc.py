@@ -1,6 +1,6 @@
 import telnetlib
 import re
-import time
+
 
 # custom exceptions
 class LCDError(RuntimeError):
@@ -10,8 +10,9 @@ class LCDError(RuntimeError):
     def __str__(self):
         return repr(self.message)
 
+
 class LCDCommandError(RuntimeError):
-    def __init__(self, message, command = 'unknown command'):
+    def __init__(self, message, command='unknown command'):
         self.message = message
         self.command = command
 
@@ -141,6 +142,7 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
           str(self.cell_width) + 'x' + str(self.cell_height) + ' cells'
 
     def widget_add(self, wid, wtype):
+        "Add a widget, providing its ID and type"
         self.command_success('widget_add s ' + wid + ' ' + wtype)
         self.widgets.append(wid)
 
@@ -161,15 +163,21 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
         map(lambda x: self.widget_del(x), self.widgets)
 
     def over_all_cells(self, func):
+        """
+        Run a function over all cells, starting with row 1, left to
+        right, top to bottom.  Indexed at 1.
+        """
         for y in range(1, self.height + 1):
             for x in range(1, self.width + 1):
                 func(x, y)
 
     def over_all_cols(self, func):
+        "Run a function over all columns in a screen, 1-indexed."
         for x in range(1, self.width + 1):
             func(x)
 
     def over_all_rows(self, func):
+        "Run a function over all rows in a screen, 1-indexed."
         for y in range(1, self.height + 1):
             func(y)
 
@@ -315,4 +323,3 @@ class ScrollingTextLCD(BaseLCD):
             self.widget_set('line2', 1, self.height, self.width, self.height, 'm', 1, text[self.width:])
         else:
             self.widget_set('line1', 1, 1, text)
-
