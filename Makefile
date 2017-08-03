@@ -2,7 +2,7 @@ default:
 	echo no op
 
 test:
-	python3 -m unittest discover -s tests -v
+	python3 -m unittest discover -v
 
 tests/%: tests/%.py
 	PYTHONPATH=. python3 $<  -v
