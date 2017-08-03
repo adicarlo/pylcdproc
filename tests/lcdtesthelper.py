@@ -20,7 +20,10 @@ class BaseLCDTest(unittest.TestCase):
         time.sleep(sleep_secs)
 
 class StaticLCDTest(BaseLCDTest):
-    "variation on BaseLCDTest such that the LCD is shared for each test in the class"
+    """
+    Variation on BaseLCDTest such that the LCD is shared for each test
+    in the class.
+    """
 
     @classmethod
     def setUpClass(cls):
