@@ -335,23 +335,24 @@ class ScrollingTextLCD(BaseLCD):
             return self
 
         def __next__(self):
-            portion = self.remain[:self.lcd.width]
-            self.remain = self.remain[self.lcd.width:]
-            if portion:
+            if self.remain and self.windex < len(self.lcd.scrolltextwidgets):
                 wid = self.lcd.scrolltextwidgets[self.windex]
-                if self.windex < self.lcd.height:
-                    self.lcd.widget_set(wid, 1, self.windex, portion)
-                elif self.windex == self.lcd.height:  # last line
-                    print("done and scrolly")
-                    self.lcd.widget_set(wid, 1, self.height, self.windex,
-                                        self.height, 'm', 1, portion)
+                line_num = self.windex + 1
+                portion = self.remain
+                self.windex += 1
+                if line_num < self.lcd.height:
+                    portion = self.remain[:self.lcd.width]
+                    self.remain = self.remain[self.lcd.width:]
+                    self.lcd.widget_set(wid, 1, line_num, portion)
+                    return portion
+                elif line_num == self.lcd.height:  # last line
+                    self.lcd.widget_set(wid, 1, line_num, self.lcd.width,
+                                        line_num, 'h', 1, self.remain)
+                    return self.remain
                 else:
                     raise StopIteration
-                self.windex += 1
-                return portion
             else:
                 raise StopIteration
-
 
     def display(self, text):
         for t in ScrollingTextLCD.TextWrapper(text, self):
