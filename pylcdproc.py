@@ -265,14 +265,28 @@ class VBargraph(BargraphWidget):
 
 class Scroller(LCDWidget):
     widget_type = 'scroller'
-    left = top = right = bottom = None
+    left = top = right = bottom = direction = speed = text = None
+
+    # FIXME: use *vargs here to tramp stuff through?
+    def __init__(self, lcd, left=1, top=1, right=None, bottom=None,
+                 direction='h', speed=1, text=None):
+        super().__init__(lcd)
+        self.set(left, top, right, bottom, direction, speed, text)
 
     def draw(self):
         self.lcd.widget_set(self.wid, self.left, self.top, self.right, self.bottom,
                             self.direction, self.speed, self.text)
 
-    def set(self, left, top, right=None, bottom=None, direction='h',
-            speed=1, text=None):
+    def set_default_right(self):
+        "Default to the right margin"
+        self.right = self.lcd.width
+
+    def set_default_bottom(self):
+        "Default to one line"
+        self.bottom = self.top
+
+    def set(self, left, top, right=None, bottom=None, direction=None,
+            speed=None, text=None):
         (self.left, self.top, self.direction, self.speed) = \
                 (left, top, direction, speed)
         if right is None and self.right is None:
@@ -298,6 +312,10 @@ class WidgetFactoryLCD(BaseLCD):
 
     def VBargraph(self, x=None, y=None, length=None):
         return VBargraph(self, x, y, length)
+
+    def Scroller(self, left, top, right=None, bottom=None):
+        return Scroller(self, left, top, right, bottom)
+
 
 ##
 ## specialized screens

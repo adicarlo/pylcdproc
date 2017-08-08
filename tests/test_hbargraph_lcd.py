@@ -5,13 +5,14 @@ import lcdtesthelper
 
 class HBargraphLCD(pylcdproc.WidgetFactoryLCD):
     "Example LCD bargraph layout for testing, single large hbargraph"
-    graph = None
 
     def populate_screen(self):
         self.graph = self.HBargraph(1, 1, 0)
+        self.caption = self.Scroller(1, 2)
 
     def display(self, value):
         self.graph.update(value)
+        self.caption.update(value)
 
 
 class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
