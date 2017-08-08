@@ -42,11 +42,13 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
     widgets     = []
     debug       = False
     # all known icons from widget.c, some models will support only some
-    known_icons = [ 'BLOCK_FILLED', 'CHECKBOX_GRAY', 'HEART_OPEN',
+    known_icons = [
+        'BLOCK_FILLED', 'CHECKBOX_GRAY', 'HEART_OPEN',
         'HEART_FILLED', 'ARROW_UP', 'ARROW_DOWN', 'ARROW_LEFT', 'ARROW_RIGHT',
         'CHECKBOX_OFF', 'CHECKBOX_ON', 'SELECTOR_AT_LEFT', 'SELECTOR_AT_RIGHT',
         'ELLIPSIS', 'STOP', 'PAUSE', 'PLAY', 'PLAYR', 'FF', 'FR', 'NEXT',
-        'PREV', 'REC' ]
+        'PREV', 'REC'
+    ]
 
     def __init__(self, appname, host='localhost', port=13666,
                  debug=False, priority='foreground'):
@@ -256,8 +258,33 @@ class BargraphWidget(LCDWidget):
 class HBargraph(BargraphWidget):
     widget_type = 'hbar'
 
+
 class VBargraph(BargraphWidget):
     widget_type = 'vbar'
+
+
+class Scroller(LCDWidget):
+    widget_type = 'scroller'
+    left = top = right = bottom = None
+
+    def draw(self):
+        self.lcd.widget_set(self.wid, self.left, self.top, self.right, self.bottom,
+                            self.direction, self.speed, self.text)
+
+    def set(self, left, top, right=None, bottom=None, direction='h',
+            speed=1, text=None):
+        (self.left, self.top, self.direction, self.speed) = \
+                (left, top, direction, speed)
+        if right is None and self.right is None:
+            self.set_default_right()
+        if bottom is None and self.bottom is None:
+            self.set_default_bottom()
+        self.draw()
+
+    def update(self, text):
+        self.text = text
+        self.draw()
+
 
 class WidgetFactoryLCD(BaseLCD):
     # widget counter
