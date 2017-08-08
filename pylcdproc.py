@@ -356,4 +356,5 @@ class ScrollingTextLCD(BaseLCD):
 
     def display(self, text):
         for t in ScrollingTextLCD.TextWrapper(text, self):
-            print("displaying", t)
+            if self.debug:
+                print("displaying", t)
