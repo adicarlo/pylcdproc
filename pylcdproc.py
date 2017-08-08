@@ -261,6 +261,7 @@ class VBargraph(BargraphWidget):
 class WidgetFactoryLCD(BaseLCD):
     # widget counter
     ctr = 1
+
     def incr_ctr(self):
         self.ctr += 1
 
@@ -275,7 +276,8 @@ class WidgetFactoryLCD(BaseLCD):
 ##
 class IconFieldLCD(BaseLCD):
     """
-    A simple LCD setup such that each cell is filled with an icon widget to be manipulated.
+    A simple LCD setup such that each cell is filled with an icon
+    widget to be manipulated.
     """
     base = 'iconfield'
 
@@ -289,7 +291,8 @@ class IconFieldLCD(BaseLCD):
 
     def icon_run(self, icon, background='BLOCK_FILLED'):
         if icon == background:
-            raise LCDLogicError("senseless to run icon " + icon + " with background " + background)
+            raise LCDLogicError("senseless to run icon " + icon +
+                                " with background " + background)
         prior = None
         def helper(ax, ay):
             nonlocal prior
@@ -306,7 +309,8 @@ class IconFieldLCD(BaseLCD):
 
 class ScrollingTextLCD(BaseLCD):
     """
-    Provide the entire LCD as a single wrapped text area, with the 2nd line scrolling as needed.
+    Provide the entire LCD as a single wrapped text area, with the 2nd
+    line scrolling as needed.
     FIXME: should be flexible for any number of lines
     """
     scrolltextwidgets = []
