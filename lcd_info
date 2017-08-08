@@ -1,0 +1,23 @@
+#!/usr/bin/python3
+
+import argparse
+import pylcdproc
+
+default_host = 'localhost'
+default_port = 13666
+
+def main():
+    parser = argparse.ArgumentParser(description="Show information about on LCDd server")
+    parser.add_argument("-H", "--host", default=default_host,
+                        help="host to connect to (default: " + default_host + ")")
+    parser.add_argument("-p", "--port", type=int, default=default_port,
+                        help="port to connect to (default: " + str(default_port) + ")")
+    parser.add_argument("-d", "--debug", action="store_true",
+                        help="enable debugging")
+    args = parser.parse_args()
+    lcd = pylcdproc.BaseLCD("lcd_info", host=args.host, port=args.port, debug=args.debug)
+    print("LCD size:  {}x{}".format(lcd.width, lcd.height))
+    print("cell size: {}x{}".format(lcd.cell_width, lcd.cell_height))
+
+if __name__ == "__main__":
+    main()

@@ -1,6 +1,6 @@
 import telnetlib
 import re
-import time
+
 
 # custom exceptions
 class LCDError(RuntimeError):
@@ -10,8 +10,9 @@ class LCDError(RuntimeError):
     def __str__(self):
         return repr(self.message)
 
+
 class LCDCommandError(RuntimeError):
-    def __init__(self, message, command = 'unknown command'):
+    def __init__(self, message, command='unknown command'):
         self.message = message
         self.command = command
 
@@ -47,7 +48,9 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
         'ELLIPSIS', 'STOP', 'PAUSE', 'PLAY', 'PLAYR', 'FF', 'FR', 'NEXT',
         'PREV', 'REC' ]
 
-    def __init__(self, appname, host='localhost', port=13666, debug=False, priority='foreground'):
+    def __init__(self, appname, host='localhost', port=13666,
+                 debug=False, priority='foreground'):
+        assert isinstance(appname, str), "appname must be a string"
         self.debug = debug
         self.tn = telnetlib.Telnet(host, port, 5)
         # the response to hello
@@ -141,8 +144,10 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
           str(self.cell_width) + 'x' + str(self.cell_height) + ' cells'
 
     def widget_add(self, wid, wtype):
+        "Add a widget, providing its ID and type"
         self.command_success('widget_add s ' + wid + ' ' + wtype)
         self.widgets.append(wid)
+        return wid
 
     def widget_set(self, wid, *widget_args):
         cmd = 'widget_set s ' + wid + ' "' + '" "'.join(map(lambda x: str(x), widget_args)) + '"'
@@ -161,15 +166,21 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
         map(lambda x: self.widget_del(x), self.widgets)
 
     def over_all_cells(self, func):
+        """
+        Run a function over all cells, starting with row 1, left to
+        right, top to bottom.  Indexed at 1.
+        """
         for y in range(1, self.height + 1):
             for x in range(1, self.width + 1):
                 func(x, y)
 
     def over_all_cols(self, func):
+        "Run a function over all columns in a screen, 1-indexed."
         for x in range(1, self.width + 1):
             func(x)
 
     def over_all_rows(self, func):
+        "Run a function over all rows in a screen, 1-indexed."
         for y in range(1, self.height + 1):
             func(y)
 
@@ -250,6 +261,7 @@ class VBargraph(BargraphWidget):
 class WidgetFactoryLCD(BaseLCD):
     # widget counter
     ctr = 1
+
     def incr_ctr(self):
         self.ctr += 1
 
@@ -264,7 +276,8 @@ class WidgetFactoryLCD(BaseLCD):
 ##
 class IconFieldLCD(BaseLCD):
     """
-    A simple LCD setup such that each cell is filled with an icon widget to be manipulated.
+    A simple LCD setup such that each cell is filled with an icon
+    widget to be manipulated.
     """
     base = 'iconfield'
 
@@ -278,7 +291,8 @@ class IconFieldLCD(BaseLCD):
 
     def icon_run(self, icon, background='BLOCK_FILLED'):
         if icon == background:
-            raise LCDLogicError("senseless to run icon " + icon + " with background " + background)
+            raise LCDLogicError("senseless to run icon " + icon +
+                                " with background " + background)
         prior = None
         def helper(ax, ay):
             nonlocal prior
@@ -295,24 +309,52 @@ class IconFieldLCD(BaseLCD):
 
 class ScrollingTextLCD(BaseLCD):
     """
-    Provide the entire LCD as a single wrapped text area, with the 2nd line scrolling as needed.
+    Provide the entire LCD as a single wrapped text area, with the 2nd
+    line scrolling as needed.
     FIXME: should be flexible for any number of lines
     """
-    wid = []
+    scrolltextwidgets = []
 
     def populate_screen(self):
         for i in range(1, self.height):
-            self.widget_add('line' + str(i), 'string')
+            self.scrolltextwidgets.append(self.widget_add('line' + str(i), 'string'))
         # final line is different
-        self.widget_add('line' + str(self.height), 'scroller')
+        self.scrolltextwidgets.append(self.widget_add('line' + str(self.height), 'scroller'))
         self.display('')
 
-    def display(self, text):
-        # FIXME: make flexible for multiple lines
-        if len(text) > self.width:
-            self.widget_set('line1', 1, 1, text[:self.width])
-            # FIXME: scrolling starts immediately, which is a bit much
-            self.widget_set('line2', 1, self.height, self.width, self.height, 'm', 1, text[self.width:])
-        else:
-            self.widget_set('line1', 1, 1, text)
+    class TextWrapper:
+        """
+        FIXME: this should be implemented to iterate over
+        scrolltextwidgets, really
+        """
+        def __init__(self, text, lcd):
+            (self.text, self.remain, self.lcd) = (text, text, lcd)
 
+        def __iter__(self):
+            self.windex = 0     # index into self.lcd.wid
+            return self
+
+        def __next__(self):
+            if self.remain and self.windex < len(self.lcd.scrolltextwidgets):
+                wid = self.lcd.scrolltextwidgets[self.windex]
+                line_num = self.windex + 1
+                portion = self.remain
+                self.windex += 1
+                if line_num < self.lcd.height:
+                    portion = self.remain[:self.lcd.width]
+                    self.remain = self.remain[self.lcd.width:]
+                    self.lcd.widget_set(wid, 1, line_num, portion)
+                    return portion
+                elif line_num == self.lcd.height:  # last line
+                    self.lcd.widget_set(wid, 1, line_num, self.lcd.width,
+                                        line_num, 'h', 1, self.remain)
+                    return self.remain
+                else:
+                    raise StopIteration
+            else:
+                raise StopIteration
+
+    def display(self, text):
+        for t in ScrollingTextLCD.TextWrapper(text, self):
+            if self.debug:
+                print("displaying", t)

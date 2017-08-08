@@ -1,6 +1,12 @@
-import pylcdproc
+import unittest
 import lcdtesthelper
+
 
 class TestSummarize(lcdtesthelper.BaseLCDTest):
     def test_summarize(self):
-        self.assertEqual(self.lcd.summarize(), "server protocol 0.3, lcd 20x2 chars with 5x8 cells")
+        r = r"server protocol 0.3, lcd [0-9x]+ chars with [0-9x]+ cells"
+        self.assertRegex(self.lcd.summarize(), r)
+
+
+if __name__ == '__main__':
+    unittest.main()

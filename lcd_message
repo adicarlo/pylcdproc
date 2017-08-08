@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import sys
 import time
 import argparse
 import pylcdproc
@@ -24,7 +25,10 @@ def main():
     message = " ".join(args.message)
     print("displaying message:", message)
     lcd.display(message)
-    time.sleep(args.time)
+    try:
+        time.sleep(args.time)
+    except KeyboardInterrupt:
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
