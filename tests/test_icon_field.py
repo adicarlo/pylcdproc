@@ -1,17 +1,21 @@
 import unittest
-import time
 import pylcdproc
 import lcdtesthelper
 
-class IconFieldTestLCD(pylcdproc.IconFieldLCD, pylcdproc.nMediaPCLCD): pass
+
+class IconFieldTestLCD(pylcdproc.IconFieldLCD, pylcdproc.nMediaPCLCD):
+    pass
+
 
 class TestIconField(lcdtesthelper.StaticLCDTest):
 
-    def instantiateLCD(appname="testIconField", host=lcdtesthelper._default_test_host()):
+    def instantiateLCD(appname="testIconField",
+                       host=lcdtesthelper._default_test_host()):
         return IconFieldTestLCD(appname, host)
 
     def assert_widget_count(self):
-        self.assertEqual(len(self.lcd.widgets), self.lcd.width * self.lcd.height)
+        self.assertEqual(len(self.lcd.widgets),
+                         self.lcd.width * self.lcd.height)
 
     def setUp(self):
         super().setUp()
@@ -51,6 +55,6 @@ class TestIconField(lcdtesthelper.StaticLCDTest):
         for idx, icon in enumerate(self.lcd.known_icons):
             self.fill_one(idx + 1, 2, icon)
 
+
 if __name__ == '__main__':
     unittest.main()
-

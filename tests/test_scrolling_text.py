@@ -8,7 +8,7 @@ class TestScrollingText(lcdtesthelper.StaticLCDTest):
                        host=lcdtesthelper._default_test_host()):
         # FIXME: is there any way to tramp the debug setting from test
         # verbosity?  or even generalize it for all test cases?
-        return pylcdproc.ScrollingTextLCD(appname, host, debug=False)
+        return pylcdproc.ScrollingTextLCD(appname, host, debug=True)
 
     def test_base(self):
         "Should have one widget per line"

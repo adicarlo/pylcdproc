@@ -2,6 +2,7 @@ import unittest
 import pylcdproc
 import lcdtesthelper
 
+
 class TestCommandSuccess(lcdtesthelper.BaseLCDTest):
     def test_basic(self):
         self.assertTrue(self.lcd.command_success('output on'))
@@ -13,4 +14,3 @@ class TestCommandSuccess(lcdtesthelper.BaseLCDTest):
 
 if __name__ == '__main__':
     unittest.main()
-

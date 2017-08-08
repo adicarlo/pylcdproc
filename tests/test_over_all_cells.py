@@ -1,6 +1,6 @@
 import unittest
-import pylcdproc
 import lcdtesthelper
+
 
 class TestOverAllCells(lcdtesthelper.BaseLCDTest):
     ctr = 0
@@ -16,7 +16,6 @@ class TestOverAllCells(lcdtesthelper.BaseLCDTest):
         self.assertGreater(expected, 1)
         self.assertEqual(self.ctr, expected)
 
+
 if __name__ == '__main__':
     unittest.main()
-
-

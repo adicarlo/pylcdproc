@@ -1,6 +1,6 @@
 import unittest
-import pylcdproc
 import lcdtesthelper
+
 
 class TestBargraphWidget(lcdtesthelper.WidgetLCDTest):
     def test_hbase(self):
@@ -17,10 +17,12 @@ class TestBargraphWidget(lcdtesthelper.WidgetLCDTest):
 
     def test_vbase(self):
         old = len(self.lcd.widgets)
-        w = self.lcd.VBargraph(x=self.lcd.width, y=self.lcd.height, length=self.lcd.height)
+        w = self.lcd.VBargraph(x=self.lcd.width, y=self.lcd.height,
+                               length=self.lcd.height)
         self.assertTrue(w.lcd)
         self.assertEqual(w.wid, "vbar1")
         self.assertEqual(len(self.lcd.widgets), old + 1)
+
 
 if __name__ == '__main__':
     unittest.main()

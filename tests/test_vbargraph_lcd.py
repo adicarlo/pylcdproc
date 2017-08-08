@@ -1,7 +1,7 @@
 import unittest
 import pylcdproc
 import lcdtesthelper
-import time
+
 
 class VBargraphLCD(pylcdproc.WidgetFactoryLCD):
     "Example LCD bargraph layout for testing, tons of vbargraphs"
@@ -22,10 +22,10 @@ class VBargraphLCD(pylcdproc.WidgetFactoryLCD):
             self.graphs[idx].update(val)
 
 
-
 class TestVBargraphLCD(lcdtesthelper.StaticLCDTest):
     @classmethod
-    def instantiateLCD(klass, appname="TestVBargraphLCD", host=lcdtesthelper._default_test_host(), debug=False):
+    def instantiateLCD(klass, appname="TestVBargraphLCD",
+                       host=lcdtesthelper._default_test_host(), debug=False):
         return VBargraphLCD(appname, host=host, debug=debug)
 
     def test_base(self):
@@ -53,8 +53,9 @@ class TestVBargraphLCD(lcdtesthelper.StaticLCDTest):
         self.lcd.set_list(list(up) + list(down))
 
     def test_value_one(self):
-        "Chasing a bug in LCD where value 1 is value 2" 
+        "Chasing a bug in LCD where value 1 is value 2"
         self.lcd.set_list([0, 1, 2] * int(self.lcd.width / 3))
+
 
 if __name__ == '__main__':
     unittest.main()

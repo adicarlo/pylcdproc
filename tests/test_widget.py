@@ -1,7 +1,6 @@
 import unittest
-import time
-import pylcdproc
 import lcdtesthelper
+
 
 class TestStringWidget(lcdtesthelper.BaseLCDTest):
     wid = 'test1'
