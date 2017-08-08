@@ -2,20 +2,20 @@ default:
 	echo no op
 
 .PHONY: test
-test:
+test: simulate.pid
 	python3 -m unittest discover -v
 
 tests/%: tests/%.py
 	PYTHONPATH=. python3 $<  -v
 
 .PHONY: sim simulate
-sim simulate:
-	{ /usr/sbin/LCDd -f -c sim/20x2.conf & echo $$! > simulate.pid; }
+simulate.pid sim simulate:
+	[ -f simulate.pid ] || { /usr/sbin/LCDd -f -c sim/20x2.conf & echo $$! > simulate.pid; }
 
 .PHONY: kill_sim kill_simulate
-kill_sim kill_simulation:
-	kill `cat simulate.pid`
-	rm simulate.pid
+kill_sim kill_simulation: simulate.pid
+	kill `cat $<`
+	rm $<
 
 .PHONY: clean
 clean:
