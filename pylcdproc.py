@@ -232,9 +232,10 @@ Base class for lcdproc widgets.  Always associated with an LCD.
 
 
 class BargraphWidget(LCDWidget):
-    x      = None
-    y      = None
-    length = None
+    widget_type = None          # override in subclass
+    x           = None
+    y           = None
+    length      = None
 
     def __init__(self, lcd, x=1, y=1, length=1):
         super().__init__(lcd)
