@@ -404,3 +404,17 @@ class ScrollingTextLCD(BaseLCD):
         for t in ScrollingTextLCD.TextWrapper(text, self):
             if self.debug:
                 print("displaying", t)
+
+
+class HBargraphLCD(WidgetFactoryLCD):
+    """
+    A simple 
+    """
+
+    def populate_screen(self):
+        self.graph = self.HBargraph(1, 1, 0)
+        self.caption = self.Scroller(1, 2)
+
+    def display(self, value):
+        self.graph.update(value)
+        self.caption.update(value)
