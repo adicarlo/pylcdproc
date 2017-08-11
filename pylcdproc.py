@@ -42,11 +42,13 @@ Very basic interface to LCDd via telnet.  Assumes we only have one screen!
     widgets     = []
     debug       = False
     # all known icons from widget.c, some models will support only some
-    known_icons = [ 'BLOCK_FILLED', 'CHECKBOX_GRAY', 'HEART_OPEN',
+    known_icons = [
+        'BLOCK_FILLED', 'CHECKBOX_GRAY', 'HEART_OPEN',
         'HEART_FILLED', 'ARROW_UP', 'ARROW_DOWN', 'ARROW_LEFT', 'ARROW_RIGHT',
         'CHECKBOX_OFF', 'CHECKBOX_ON', 'SELECTOR_AT_LEFT', 'SELECTOR_AT_RIGHT',
         'ELLIPSIS', 'STOP', 'PAUSE', 'PLAY', 'PLAYR', 'FF', 'FR', 'NEXT',
-        'PREV', 'REC' ]
+        'PREV', 'REC'
+    ]
 
     def __init__(self, appname, host='localhost', port=13666,
                  debug=False, priority='foreground'):
@@ -232,9 +234,10 @@ Base class for lcdproc widgets.  Always associated with an LCD.
 
 
 class BargraphWidget(LCDWidget):
-    x      = None
-    y      = None
-    length = None
+    widget_type = None          # override in subclass
+    x           = None
+    y           = None
+    length      = None
 
     def __init__(self, lcd, x=1, y=1, length=1):
         super().__init__(lcd)
@@ -255,8 +258,47 @@ class BargraphWidget(LCDWidget):
 class HBargraph(BargraphWidget):
     widget_type = 'hbar'
 
+
 class VBargraph(BargraphWidget):
     widget_type = 'vbar'
+
+
+class Scroller(LCDWidget):
+    widget_type = 'scroller'
+    left = top = right = bottom = direction = speed = text = None
+
+    # FIXME: use *vargs here to tramp stuff through?
+    def __init__(self, lcd, left=1, top=1, right=None, bottom=None,
+                 direction='h', speed=1, text=None):
+        super().__init__(lcd)
+        self.set(left, top, right, bottom, direction, speed, text)
+
+    def draw(self):
+        self.lcd.widget_set(self.wid, self.left, self.top, self.right, self.bottom,
+                            self.direction, self.speed, self.text)
+
+    def set_default_right(self):
+        "Default to the right margin"
+        self.right = self.lcd.width
+
+    def set_default_bottom(self):
+        "Default to one line"
+        self.bottom = self.top
+
+    def set(self, left, top, right=None, bottom=None, direction=None,
+            speed=None, text=None):
+        (self.left, self.top, self.direction, self.speed) = \
+                (left, top, direction, speed)
+        if right is None and self.right is None:
+            self.set_default_right()
+        if bottom is None and self.bottom is None:
+            self.set_default_bottom()
+        self.draw()
+
+    def update(self, text):
+        self.text = text
+        self.draw()
+
 
 class WidgetFactoryLCD(BaseLCD):
     # widget counter
@@ -270,6 +312,10 @@ class WidgetFactoryLCD(BaseLCD):
 
     def VBargraph(self, x=None, y=None, length=None):
         return VBargraph(self, x, y, length)
+
+    def Scroller(self, left, top, right=None, bottom=None):
+        return Scroller(self, left, top, right, bottom)
+
 
 ##
 ## specialized screens
@@ -358,3 +404,17 @@ class ScrollingTextLCD(BaseLCD):
         for t in ScrollingTextLCD.TextWrapper(text, self):
             if self.debug:
                 print("displaying", t)
+
+
+class HBargraphLCD(WidgetFactoryLCD):
+    """
+    A simple 
+    """
+
+    def populate_screen(self):
+        self.graph = self.HBargraph(1, 1, 0)
+        self.caption = self.Scroller(1, 2)
+
+    def display(self, value):
+        self.graph.update(value)
+        self.caption.update(value)

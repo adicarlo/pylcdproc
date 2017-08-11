@@ -1,17 +1,7 @@
 import unittest
 import pylcdproc
+import time
 import lcdtesthelper
-
-
-class HBargraphLCD(pylcdproc.WidgetFactoryLCD):
-    "Example LCD bargraph layout for testing, single large hbargraph"
-    graph = None
-
-    def populate_screen(self):
-        self.graph = self.HBargraph(1, 1, 0)
-
-    def display(self, value):
-        self.graph.update(value)
 
 
 class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
@@ -35,6 +25,7 @@ class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
         "run from zero to max"
         for i in range(0, self.max_width):
             self.lcd.display(i)
+            time.sleep(0.3)
 
     def test_down(self):
         "run max to zero"
