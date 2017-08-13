@@ -25,7 +25,6 @@ class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
         "run from zero to max"
         for i in range(0, self.max_width):
             self.lcd.display(i)
-            time.sleep(0.3)
 
     def test_down(self):
         "run max to zero"
