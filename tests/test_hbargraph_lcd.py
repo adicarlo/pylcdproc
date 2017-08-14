@@ -19,7 +19,7 @@ class TestHBargraphLCD(lcdtesthelper.StaticLCDTest):
     def test_base(self):
         "some basic assertions"
         self.assertTrue(self.lcd.graph)   # do we have a widget
-        self.assertEqual(len(self.lcd.widgets), 1)
+        self.assertEqual(len(self.lcd.widgets), 2)
 
     def test_up(self):
         "run from zero to max"
