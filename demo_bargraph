@@ -1,0 +1,43 @@
+#!/usr/bin/python3
+
+import argparse
+import pylcdproc
+import getch
+import sys
+
+default_host = 'localhost'
+default_port = 13666
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Demonstrate the HBargraphLCD widget")
+    parser.add_argument("-H", "--host", default=default_host,
+                        help="host to connect to (default: " + default_host + ")")
+    parser.add_argument("-p", "--port", type=int, default=default_port,
+                        help="port to connect to (default: " + str(default_port) + ")")
+    parser.add_argument("-d", "--debug", action="store_true",
+                        help="enable debugging")
+    args = parser.parse_args()
+    lcd = pylcdproc.HBargraphLCD("demo_bargraph", host=args.host, port=args.port, debug=args.debug)
+    val = 0
+    lcd.display(val)
+    print("use left and right arrows to set bargraph value, currently", val)
+    print("use 'x' or 'q' to quit")
+    while True:
+        change = None
+        key = getch.getch()
+        if key == 'x':
+            print("exiting...")
+            sys.exit(1)
+        elif key == 'C':
+            change = 1
+        elif key == 'D':
+            change = -1
+        if change:
+            val += change
+            print("new value:", val)
+            lcd.display(val)
+
+
+if __name__ == "__main__":
+    main()
