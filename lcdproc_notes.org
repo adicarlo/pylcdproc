@@ -1,0 +1,12 @@
+* Bugs to track down
+
+These might be bugs in pylcdproc, or they might be bugs in lcdproc
+itself, not sure.
+
+** TODO bargraph bugs
+** Bugs affecting matrix orbital
+*** TODO mtxorb: screen_set XX -backlight toggle
+
+While -backlight on and -backlight off both work, -backlight toggle does not, wtf!
+
+*** TODO title widget using [P] right than filled block
