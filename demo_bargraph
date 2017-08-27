@@ -11,6 +11,7 @@ default_port = 13666
 
 def main():
     parser = argparse.ArgumentParser(description="Demonstrate the HBargraphLCD widget")
+    parser.add_argument("initial", type=int, default=0, nargs='?', help="initial value")
     parser.add_argument("-H", "--host", default=default_host,
                         help="host to connect to (default: " + default_host + ")")
     parser.add_argument("-p", "--port", type=int, default=default_port,
@@ -19,20 +20,32 @@ def main():
                         help="enable debugging")
     args = parser.parse_args()
     lcd = pylcdproc.HBargraphLCD("demo_bargraph", host=args.host, port=args.port, debug=args.debug)
-    val = 0
+    val = args.initial
     lcd.display(val)
     print("use left and right arrows to set bargraph value, currently", val)
     print("use 'x' or 'q' to quit")
+    control = None
     while True:
         change = None
         key = getch.getch()
-        if key == 'x':
+        if key == 'x' or key == 'q':
             print("exiting...")
             sys.exit(1)
+        elif key == '[' or ord(key) == 27:
+            control = True
+            next
         elif key == 'C':
             change = 1
         elif key == 'D':
             change = -1
+        else:
+            ctrl = "ctrl" if control else ""
+            print("unknown key:", ord(key), "'" + key + "'", ctrl)
+
+        if control:             # reset control
+            control = None
+
+
         if change:
             val += change
             print("new value:", val)
